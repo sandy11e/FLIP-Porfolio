@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/logo.png">
 <title>FLIP — Your Tech Catalyst</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
@@ -194,7 +195,7 @@ nav.scrolled {
   font-size: clamp(0.85rem, 3vw, 1.45rem);
   font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase;
   color: var(--accent); text-align: center;
-  animation: fadeUp 0.9s ease 1s both;
+  animation: fadeUp 0.9s ease 1.4s both;
 }
 .hero-sub {
   margin-top: 0.9rem;
@@ -203,19 +204,19 @@ nav.scrolled {
   color: #555; letter-spacing: 0.03em;
   text-align: center; max-width: 480px;
   line-height: 1.75;
-  animation: fadeUp 0.9s ease 1.8s both;
+  animation: fadeUp 0.9s ease 1.5s both;
   padding: 0 0.5rem;
 }
 .hero-cta-row {
   display: flex; gap: 0.85rem; margin-top: 2.5rem;
-  animation: fadeUp 0.9s ease 2.4s both;
+  animation: fadeUp 0.9s ease 1.5s both;
   flex-wrap: wrap; justify-content: center;
 }
 .hero-scroll-hint {
-  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 2rem; left: 0; right: 0;
   display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
-  opacity: 0.4; animation: fadeUp 0.9s ease 2.8s both; cursor: pointer;
-  z-index: 2;
+  opacity: 0.4; animation: fadeUp 0.9s ease 2s both; cursor: pointer;
+  z-index: 2; width: fit-content; margin: 0 auto;
 }
 .hero-scroll-hint span {
   font-family: 'DM Sans', sans-serif; font-size: 0.65rem;
@@ -643,6 +644,75 @@ footer { background: var(--black); color: var(--cream); padding: clamp(3rem, 5vw
 .footer-belief {
   font-family: 'Cormorant Garamond', serif; font-style: italic;
   font-size: 0.85rem; color: var(--silver-warm); opacity: 0.5;
+}
+
+/* ══════════════════════════════════════
+   SUCCESS TOAST
+══════════════════════════════════════ */
+.success-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(22,22,22,0.55);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.success-overlay.show { opacity: 1; pointer-events: all; }
+
+.success-card {
+  background: var(--cream); border: 1.5px solid rgba(174,174,174,0.3);
+  border-radius: 6px; padding: clamp(2rem, 4vw, 3rem) clamp(2rem, 5vw, 3.5rem);
+  max-width: 460px; width: 90%; text-align: center;
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+  position: relative;
+}
+.success-overlay.show .success-card {
+  transform: translateY(0) scale(1);
+}
+
+.success-icon {
+  width: 54px; height: 54px; margin: 0 auto 1.4rem;
+  border-radius: 50%; background: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+}
+.success-icon svg { width: 24px; height: 24px; }
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 500; color: var(--black);
+  margin-bottom: 0.6rem; line-height: 1.2;
+}
+.success-msg {
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+  color: #666; line-height: 1.75; margin-bottom: 1.8rem;
+}
+.success-close {
+  font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.75rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream);
+  background: var(--black); padding: 0.75rem 2rem; border: none;
+  border-radius: 2px; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.success-close:hover { background: #2d2d2d; transform: translateY(-2px); }
+
+.success-bar {
+  position: absolute; bottom: 0; left: 0; height: 3px;
+  background: var(--black); border-radius: 0 0 6px 6px;
+  animation: shrinkBar 8s linear forwards;
+  width: 100%;
+}
+@keyframes shrinkBar {
+  from { width: 100%; }
+  to   { width: 0%; }
 }
 
 /* ══════════════════════════════════════
@@ -1206,6 +1276,21 @@ footer { background: var(--black); color: var(--cream); padding: clamp(3rem, 5vw
   </div>
 </section>
 
+<!-- ═══════════════ SUCCESS TOAST ═════════════════════════ -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#F0EDE4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <div class="success-title">Message Sent<br><em>Successfully</em></div>
+    <p class="success-msg">Thank you for reaching out! Your message has been sent to our team. We'll get back to you within 24 hours.</p>
+    <button class="success-close" onclick="closeSuccess()">Got It &rarr;</button>
+    <div class="success-bar" id="successBar"></div>
+  </div>
+</div>
+
 <!-- ═══════════════ FOOTER ════════════════════════════════ -->
 <footer>
   <div class="container">
@@ -1350,6 +1435,8 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 
 /* ── Contact Form ───────────────────────────────── */
+let successTimer = null;
+
 function sendMail(e) {
   e.preventDefault();
   const fname   = document.getElementById('fname').value.trim();
@@ -1367,7 +1454,46 @@ function sendMail(e) {
     `— PROJECT DETAILS —\n${message}\n\nLooking forward to hearing from you.\n\nBest regards,\n${fname} ${lname}`
   );
   window.location.href = `mailto:flip.techh@gmail.com?subject=${subject}&body=${body}`;
+
+  /* Show success toast after a brief delay (mail client opens first) */
+  setTimeout(() => {
+    showSuccess();
+    document.getElementById('contactForm').reset();
+  }, 800);
 }
+
+function showSuccess() {
+  const overlay = document.getElementById('successOverlay');
+  const bar = document.getElementById('successBar');
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  /* Restart the progress bar animation */
+  bar.style.animation = 'none';
+  bar.offsetHeight; /* trigger reflow */
+  bar.style.animation = 'shrinkBar 4s linear forwards';
+
+  /* Auto-close after 4 seconds */
+  clearTimeout(successTimer);
+  successTimer = setTimeout(closeSuccess, 4000);
+}
+
+function closeSuccess() {
+  clearTimeout(successTimer);
+  const overlay = document.getElementById('successOverlay');
+  overlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+/* Close on overlay background click */
+document.getElementById('successOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeSuccess();
+});
+
+/* Close on Escape key */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('successOverlay').classList.contains('show')) closeSuccess();
+});
 </script>
 </body>
 </html>
