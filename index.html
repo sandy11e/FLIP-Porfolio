@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>FLIP — Your Tech Catalyst</title>
+<link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+<link rel="icon" type="image/png" sizes="16x16" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -77,35 +81,21 @@
     pointer-events: none; z-index: 0;
   }
 
-  /* ══════════════════════════════════════════════════════
-     HERO ANIMATION — centre stage
-     
-     Step 1 (0 → 200ms)   : Logo fades IN, large (scale 2.6), dead centre
-     Step 2 (200 → 900ms) : Logo SHRINKS to scale(1) + ROTATES 360° — still centred
-     Step 3 (900 → 1650ms): Entire lockup SLIDES LEFT to natural position
-                            while "FLIP" text WIPES IN from left → right in sync
-     Step 4 (1650ms+)     : Tagline / sub / CTA fade up
-  ══════════════════════════════════════════════════════ */
-
-  /* Outer wrapper — JS shifts this left during slide phase */
   #heroLockup {
     position: relative; z-index: 2;
     display: flex; align-items: center;
-    /* will-change helps GPU compositing */
     will-change: transform;
   }
 
-  /* The SVG logo — JS drives scale + rotate during shrink phase */
   #heroLogo {
     width: clamp(70px, 10vw, 110px);
     height: clamp(70px, 10vw, 110px);
     display: block; flex-shrink: 0;
-    opacity: 0;                  /* JS fades in */
+    opacity: 0;
     transform-origin: center center;
     will-change: transform, opacity;
   }
 
-  /* Text clip mask — JS opens it left→right during slide */
   #heroNameClip {
     overflow: hidden;
     clip-path: inset(0 100% 0 0);
@@ -124,7 +114,6 @@
     display: block;
   }
 
-  /* Tagline / sub / CTA — pure CSS, delayed until after slide */
   .hero-tagline {
     margin-top: 2rem;
     font-family: 'Cormorant Garamond', serif;
@@ -234,6 +223,234 @@
   .why-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.6rem; letter-spacing: 0.04em; }
   .why-text { font-size: 0.85rem; line-height: 1.7; color: #666; }
 
+  /* ══════════════════════════════════════════════════════
+     ─── WORKS / PORTFOLIO ──────────────────────────────
+  ══════════════════════════════════════════════════════ */
+  #works { background: var(--black); color: var(--cream); overflow: hidden; }
+  #works .section-label { color: var(--silver-warm); }
+  #works .section-label::before { background: var(--silver-warm); }
+  #works .section-title { color: var(--cream); }
+
+  .works-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 5rem; gap: 2rem; flex-wrap: wrap;
+  }
+  .works-header-right {
+    font-size: 0.85rem; color: var(--silver-warm); line-height: 1.7;
+    max-width: 280px; text-align: right;
+  }
+
+  /* ── Live Projects Grid ── */
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(174,174,174,0.15);
+    border: 1px solid rgba(174,174,174,0.15);
+    margin-bottom: 5rem;
+  }
+
+  .work-card {
+    background: var(--black);
+    padding: 2.8rem 2.4rem;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    transition: background 0.4s;
+    cursor: pointer;
+  }
+  .work-card:hover { background: #1e1e1e; }
+
+  /* Animated corner accent */
+  .work-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 0 0;
+    border-color: transparent transparent transparent rgba(174,174,174,0.2);
+    transition: border-width 0.4s ease;
+  }
+  .work-card:hover::before {
+    border-width: 60px 60px 0 0;
+    border-color: rgba(174,174,174,0.15) transparent transparent transparent;
+  }
+
+  /* Bottom slide line */
+  .work-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 2.4rem;
+    width: 0; height: 1.5px;
+    background: rgba(200,200,200,0.6);
+    transition: width 0.5s ease;
+  }
+  .work-card:hover::after { width: calc(100% - 4.8rem); }
+
+  .work-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.78rem; letter-spacing: 0.2em;
+    color: rgba(174,174,174,0.4);
+  }
+
+  .work-preview {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(174,174,174,0.12);
+    background: #1a1a1a;
+    position: relative;
+  }
+
+  /* Simulated browser chrome inside preview */
+  .work-preview-chrome {
+    height: 22px;
+    background: #252525;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 5px;
+    border-bottom: 1px solid rgba(174,174,174,0.08);
+  }
+  .chrome-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .chrome-dot:nth-child(1) { background: rgba(255,94,87,0.5); }
+  .chrome-dot:nth-child(2) { background: rgba(255,188,36,0.5); }
+  .chrome-dot:nth-child(3) { background: rgba(40,200,64,0.5); }
+  .chrome-bar {
+    flex: 1; height: 10px; background: rgba(174,174,174,0.1);
+    border-radius: 2px; margin-left: 6px;
+  }
+
+  .work-preview-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .work-preview-line {
+    height: 8px; background: rgba(174,174,174,0.08); border-radius: 2px;
+  }
+  .work-preview-line.wide { width: 80%; }
+  .work-preview-line.mid  { width: 60%; }
+  .work-preview-line.short{ width: 40%; }
+  .work-preview-hero {
+    margin-top: 4px; height: 44px;
+    background: rgba(174,174,174,0.05);
+    border-radius: 2px;
+    border: 1px solid rgba(174,174,174,0.06);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .work-preview-icon {
+    width: 18px; height: 18px; opacity: 0.2;
+  }
+
+  .work-meta { display: flex; flex-direction: column; gap: 0.35rem; }
+  .work-name {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.1rem; letter-spacing: 0.04em; color: var(--cream);
+  }
+  .work-tag {
+    font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
+    color: var(--silver-warm); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .work-url {
+    font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+    color: rgba(174,174,174,0.4); letter-spacing: 0.04em;
+    border-top: 1px solid rgba(174,174,174,0.1);
+    padding-top: 1rem; margin-top: auto;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: color 0.3s;
+  }
+  .work-card:hover .work-url { color: rgba(200,200,200,0.7); }
+  .work-url-arrow {
+    width: 14px; height: 14px; transition: transform 0.3s;
+  }
+  .work-card:hover .work-url-arrow { transform: translate(3px, -3px); }
+
+  /* ── Ongoing Works Strip ── */
+  .ongoing-strip {
+    border: 1px solid rgba(174,174,174,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .ongoing-header {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.4rem 2rem;
+    border-bottom: 1px solid rgba(174,174,174,0.15);
+    background: rgba(255,255,255,0.02);
+  }
+  .ongoing-pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 0 rgba(74,222,128,0.4);
+    animation: pulse-green 2s infinite;
+  }
+  @keyframes pulse-green {
+    0%  { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+  }
+  .ongoing-header-label {
+    font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #4ade80; font-weight: 500;
+  }
+  .ongoing-header-count {
+    margin-left: auto;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; color: rgba(174,174,174,0.4);
+    letter-spacing: 0.1em;
+  }
+
+  .ongoing-items { display: flex; flex-direction: column; }
+  .ongoing-item {
+    display: flex; align-items: center;
+    padding: 1.4rem 2rem; gap: 1.5rem;
+    border-bottom: 1px solid rgba(174,174,174,0.08);
+    transition: background 0.3s;
+  }
+  .ongoing-item:last-child { border-bottom: none; }
+  .ongoing-item:hover { background: rgba(255,255,255,0.02); }
+  .ongoing-item-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 300;
+    color: rgba(174,174,174,0.2); width: 28px; flex-shrink: 0;
+  }
+  .ongoing-item-info { flex: 1; }
+  .ongoing-item-name {
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 0.9rem; color: var(--cream); letter-spacing: 0.04em;
+  }
+  .ongoing-item-type {
+    font-size: 0.75rem; color: rgba(174,174,174,0.5);
+    margin-top: 0.2rem; letter-spacing: 0.06em;
+  }
+  .ongoing-item-status {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(74,222,128,0.7);
+  }
+  .ongoing-status-bar {
+    width: 80px; height: 3px;
+    background: rgba(174,174,174,0.1); border-radius: 2px; overflow: hidden;
+  }
+  .ongoing-status-fill {
+    height: 100%; border-radius: 2px; background: #4ade80;
+    animation: progressGlow 3s ease-in-out infinite alternate;
+  }
+  @keyframes progressGlow {
+    from { opacity: 0.6; }
+    to   { opacity: 1; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+  }
+
   /* ─── CONTACT ─────────────────────────────────────────── */
   #contact { background: var(--white); }
   .contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; margin-top: 4rem; align-items: start; }
@@ -292,12 +509,19 @@
     .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
     .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
+    .works-grid { grid-template-columns: 1fr; }
+    .works-header { flex-direction: column; gap: 1rem; }
+    .works-header-right { text-align: left; max-width: 100%; }
+    .ongoing-item { flex-wrap: wrap; gap: 0.8rem; }
   }
   @media (max-width: 600px) {
     .services-grid { grid-template-columns: 1fr; }
     .why-grid { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
     .about-stats { grid-template-columns: 1fr 1fr; }
+    .work-card { padding: 2rem 1.6rem; }
+    .ongoing-item { padding: 1.2rem 1.4rem; }
+    .ongoing-header { padding: 1.2rem 1.4rem; }
   }
 </style>
 </head>
@@ -324,6 +548,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#process">Process</a></li>
+    <li><a href="#works">Works</a></li>
     <li><a href="#why">Why Us</a></li>
     <li><a href="#contact" class="nav-cta nav-cta-desktop">Get in Touch</a></li>
   </ul>
@@ -336,6 +561,7 @@
   <a href="#about" onclick="closeMobile()">About</a>
   <a href="#services" onclick="closeMobile()">Services</a>
   <a href="#process" onclick="closeMobile()">Process</a>
+  <a href="#works" onclick="closeMobile()">Works</a>
   <a href="#why" onclick="closeMobile()">Why Us</a>
   <a href="#contact" onclick="closeMobile()">Contact</a>
 </div>
@@ -343,10 +569,7 @@
 <!-- ═══ HERO ══════════════════════════════════════════════ -->
 <section id="hero">
   <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;">
-
-    <!-- The lockup: logo + text side by side. JS repositions the whole thing. -->
     <div id="heroLockup">
-      <!-- Logo — JS drives opacity, scale, rotate -->
       <svg id="heroLogo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g transform="rotate(-40, 50, 50)">
           <polygon points="20,8 80,8 50,50" fill="rgba(22,22,22,0.06)" stroke="#161616" stroke-width="4.5" stroke-linejoin="round"/>
@@ -359,12 +582,10 @@
           <path d="M 86 68 Q 92 73 86 78" stroke="#161616" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.2"/>
         </g>
       </svg>
-      <!-- Text — JS clips it open left→right -->
       <div id="heroNameClip">
         <span id="heroName">FLIP</span>
       </div>
     </div>
-
     <p class="hero-tagline">Your Tech Catalyst</p>
     <p class="hero-sub">Progress demands change. We build scalable, performance-driven digital systems that create measurable business outcomes.</p>
     <div class="hero-cta-row">
@@ -372,7 +593,6 @@
       <a href="#contact" class="btn-outline">Start a Project</a>
     </div>
   </div>
-
   <div class="hero-scroll-hint" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
     <span>Scroll</span>
     <div class="scroll-arrow"></div>
@@ -461,6 +681,182 @@
       <div class="process-step reveal reveal-delay-3"><div class="step-num">04</div><div class="step-content"><div class="step-name">Testing & Launch</div><div class="step-desc">Comprehensive testing across functionality, performance, security, device compatibility, and system stability. Post-launch monitoring ensures rapid response to any issues.</div></div></div>
       <div class="process-step reveal reveal-delay-4"><div class="step-num">05</div><div class="step-content"><div class="step-name">Continuous Support & Optimization</div><div class="step-desc">Ongoing system monitoring, performance tuning, feature enhancements, analytics refinement, and scalability improvements as your business evolves.</div></div></div>
     </div>
+  </div>
+</section>
+
+<!-- ═══ WORKS ════════════════════════════════════════════════ -->
+<section id="works">
+  <div class="container">
+    <div class="works-header">
+      <div>
+        <div class="section-label reveal">Our Portfolio</div>
+        <h2 class="section-title reveal reveal-delay-1">Live Projects &<br><em style="font-weight:300;">Ongoing Work</em></h2>
+      </div>
+      <p class="works-header-right reveal reveal-delay-2">Real solutions. Live systems. Measurable results — from fashion retail to AI-powered tools.</p>
+    </div>
+
+    <!-- Live Projects -->
+    <div class="works-grid reveal">
+
+      <!-- Card 1 — Fiber Fashions -->
+      <a class="work-card" href="https://fiber-fashions.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div class="work-num">Project 01</div>
+        <div class="work-preview">
+          <div class="work-preview-chrome">
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-bar"></div>
+          </div>
+          <div class="work-preview-body">
+            <div class="work-preview-hero">
+              <!-- Fashion icon -->
+              <svg class="work-preview-icon" viewBox="0 0 24 24" fill="none" stroke="#F0EDE4" stroke-width="1.5">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+            </div>
+            <div class="work-preview-line wide" style="margin-top:4px;"></div>
+            <div class="work-preview-line mid"></div>
+            <div class="work-preview-line short"></div>
+          </div>
+        </div>
+        <div class="work-meta">
+          <div class="work-name">Fiber Fashions</div>
+          <div class="work-tag">E-Commerce &nbsp;·&nbsp; Fashion Retail</div>
+        </div>
+        <div class="work-url">
+          fiber-fashions.vercel.app
+          <svg class="work-url-arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 12L12 2M12 2H5M12 2v7"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card 2 — Teen Trashers -->
+      <a class="work-card" href="https://teen-trashers-nzsj.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div class="work-num">Project 02</div>
+        <div class="work-preview">
+          <div class="work-preview-chrome">
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-bar"></div>
+          </div>
+          <div class="work-preview-body">
+            <div class="work-preview-hero">
+              <!-- Youth brand icon -->
+              <svg class="work-preview-icon" viewBox="0 0 24 24" fill="none" stroke="#F0EDE4" stroke-width="1.5">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+              </svg>
+            </div>
+            <div class="work-preview-line wide" style="margin-top:4px;"></div>
+            <div class="work-preview-line short"></div>
+            <div class="work-preview-line mid"></div>
+          </div>
+        </div>
+        <div class="work-meta">
+          <div class="work-name">Teen Trashers</div>
+          <div class="work-tag">Website &nbsp;·&nbsp; Youth Brand</div>
+        </div>
+        <div class="work-url">
+          teen-trashers-nzsj.vercel.app
+          <svg class="work-url-arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 12L12 2M12 2H5M12 2v7"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card 3 — Resume AI -->
+      <a class="work-card" href="https://resume-ai-kl7p.vercel.app/" target="_blank" rel="noopener noreferrer">
+        <div class="work-num">Project 03</div>
+        <div class="work-preview">
+          <div class="work-preview-chrome">
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-bar"></div>
+          </div>
+          <div class="work-preview-body">
+            <div class="work-preview-hero">
+              <!-- AI / document icon -->
+              <svg class="work-preview-icon" viewBox="0 0 24 24" fill="none" stroke="#F0EDE4" stroke-width="1.5">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <path d="M8 6h8M8 10h8M8 14h5"/>
+                <circle cx="17" cy="17" r="3"/>
+                <path d="M19.5 19.5L22 22"/>
+              </svg>
+            </div>
+            <div class="work-preview-line mid" style="margin-top:4px;"></div>
+            <div class="work-preview-line wide"></div>
+            <div class="work-preview-line short"></div>
+          </div>
+        </div>
+        <div class="work-meta">
+          <div class="work-name">Resume AI</div>
+          <div class="work-tag">SaaS &nbsp;·&nbsp; AI-Powered Tool</div>
+        </div>
+        <div class="work-url">
+          resume-ai-kl7p.vercel.app
+          <svg class="work-url-arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 12L12 2M12 2H5M12 2v7"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Ongoing Projects Strip -->
+    <div class="ongoing-strip reveal reveal-delay-2">
+      <div class="ongoing-header">
+        <div class="ongoing-pulse"></div>
+        <span class="ongoing-header-label">Ongoing Projects</span>
+        <span class="ongoing-header-count">3 + active engagements</span>
+      </div>
+      <div class="ongoing-items">
+        <div class="ongoing-item">
+          <div class="ongoing-item-num">04</div>
+          <div class="ongoing-item-info">
+            <div class="ongoing-item-name">E-Commerce Platform</div>
+            <div class="ongoing-item-type">Custom Store Build &nbsp;·&nbsp; In Development</div>
+          </div>
+          <div class="ongoing-item-status">
+            <div class="ongoing-status-bar">
+              <div class="ongoing-status-fill" style="width:65%;"></div>
+            </div>
+            65%
+          </div>
+        </div>
+        <div class="ongoing-item">
+          <div class="ongoing-item-num">05</div>
+          <div class="ongoing-item-info">
+            <div class="ongoing-item-name">Business Management Suite</div>
+            <div class="ongoing-item-type">Custom Software &nbsp;·&nbsp; In Development</div>
+          </div>
+          <div class="ongoing-item-status">
+            <div class="ongoing-status-bar">
+              <div class="ongoing-status-fill" style="width:40%;"></div>
+            </div>
+            40%
+          </div>
+        </div>
+        <div class="ongoing-item">
+          <div class="ongoing-item-num">06</div>
+          <div class="ongoing-item-info">
+            <div class="ongoing-item-name">Digital Marketing Campaign</div>
+            <div class="ongoing-item-type">Performance Marketing &nbsp;·&nbsp; Active</div>
+          </div>
+          <div class="ongoing-item-status">
+            <div class="ongoing-status-bar">
+              <div class="ongoing-status-fill" style="width:80%;"></div>
+            </div>
+            Active
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -569,6 +965,7 @@
         <ul>
           <li><a href="#about">About Us</a></li>
           <li><a href="#process">Our Process</a></li>
+          <li><a href="#works">Our Works</a></li>
           <li><a href="#why">Why FLIP</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="mailto:flip.techh@gmail.com">flip.techh@gmail.com</a></li>
@@ -576,165 +973,77 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2024 FLIP. All rights reserved. Tamil Nadu, India.</p>
+      <p>© 2025 FLIP. All rights reserved. Tamil Nadu, India.</p>
       <p class="footer-belief">Progress Demands Change.</p>
     </div>
   </div>
 </footer>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   HERO ANIMATION
-   
-   Phase 1  0ms  → 180ms   Logo fades IN, large (scale 2.5), dead centre screen
-   Phase 2  180ms → 850ms  Logo SHRINKS (2.5→1) + ROTATES 360°, stays centred
-   Phase 3  850ms → 1600ms Lockup SLIDES LEFT to final resting position
-                            while "FLIP" text WIPES IN (clip-path) in sync
-   After 1600ms             Tagline / sub / CTA fade up via CSS animation
-═══════════════════════════════════════════════════════════ */
+/* ═══ HERO ANIMATION ════════════════════════════════════ */
 (function () {
   const logo     = document.getElementById('heroLogo');
   const lockup   = document.getElementById('heroLockup');
   const nameClip = document.getElementById('heroNameClip');
-
-  /* ── Timing ── */
-  const T1 = 180;   // fade-in ends
-  const T2 = 850;   // shrink+rotate ends
-  const T3 = 1600;  // slide+reveal ends
-
-  /* ── Easing ── */
+  const T1 = 180, T2 = 850, T3 = 1600;
   function easeOutExpo(t)    { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
   function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
-  function easeOutBack(t) {
-    const c1 = 1.4, c3 = c1 + 1;
-    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-  }
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function clamp(t, a, b) { return Math.max(a, Math.min(b, t)); }
-  function norm(t, start, end) { return clamp((t - start) / (end - start), 0, 1); }
-
-  /* ── Measure slide offset (how far right to shift so logo is screen-centred) ── */
-  /* We do this BEFORE the rAF loop — layout is already stable */
+  function easeOutBack(t) { const c1=1.4,c3=c1+1; return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2); }
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function clamp(t,a,b){return Math.max(a,Math.min(b,t));}
+  function norm(t,s,e){return clamp((t-s)/(e-s),0,1);}
   let slideOffset = 0;
-
   function measure() {
-    /* Temporarily make logo visible at scale(1) to read its natural position */
-    logo.style.opacity   = '0';
-    logo.style.transform = 'scale(1) rotate(0deg)';
-    lockup.style.transform = 'translateX(0)';
-
-    const logoRect    = logo.getBoundingClientRect();
-    const logoCentreX = logoRect.left + logoRect.width / 2;
-    const viewCentreX = window.innerWidth / 2;
-
-    /* slideOffset = how far RIGHT we push the lockup so the logo sits at viewport centre */
-    slideOffset = viewCentreX - logoCentreX;
-
-    /* Push lockup to start position (logo centred) */
-    lockup.style.transform = `translateX(${slideOffset}px)`;
+    logo.style.opacity='0'; logo.style.transform='scale(1) rotate(0deg)'; lockup.style.transform='translateX(0)';
+    const lr=logo.getBoundingClientRect(); const lc=lr.left+lr.width/2; const vc=window.innerWidth/2;
+    slideOffset=vc-lc; lockup.style.transform=`translateX(${slideOffset}px)`;
   }
-
   measure();
-
-  /* ── Animation loop ── */
-  let startTime = null;
-
-  function tick(ts) {
-    if (!startTime) startTime = ts;
-    const t = ts - startTime;
-
-    /* PHASE 1 — Fade in (logo large, centred) */
-    const p1 = norm(t, 0, T1);
-    const opacity = easeOutExpo(p1);
-
-    /* PHASE 2 — Shrink + Rotate (still centred) */
-    const p2    = norm(t, T1, T2);
-    const p2e   = easeOutBack(p2);
-    const scale  = lerp(2.5, 1, p2e);
-    const rotate = lerp(0, 360, easeInOutCubic(p2));
-
-    /* PHASE 3 — Slide left + text reveal */
-    const p3      = norm(t, T2, T3);
-    const p3e     = easeInOutCubic(p3);
-    const offsetX = lerp(slideOffset, 0, p3e);
-    const reveal  = Math.round(p3e * 100);
-
-    /* Apply */
-    logo.style.opacity       = opacity;
-    logo.style.transform     = `scale(${scale}) rotate(${rotate}deg)`;
-    lockup.style.transform   = `translateX(${offsetX}px)`;
-    nameClip.style.clipPath  = `inset(0 ${100 - reveal}% 0 0)`;
-
-    if (t < T3 + 50) {
-      requestAnimationFrame(tick);
-    } else {
-      /* Snap clean */
-      logo.style.opacity      = '1';
-      logo.style.transform    = 'scale(1) rotate(360deg)';
-      lockup.style.transform  = 'translateX(0)';
-      nameClip.style.clipPath = 'inset(0 0% 0 0)';
-    }
+  let startTime=null;
+  function tick(ts){
+    if(!startTime)startTime=ts; const t=ts-startTime;
+    const p1=norm(t,0,T1); const opacity=easeOutExpo(p1);
+    const p2=norm(t,T1,T2); const p2e=easeOutBack(p2); const scale=lerp(2.5,1,p2e); const rotate=lerp(0,360,easeInOutCubic(p2));
+    const p3=norm(t,T2,T3); const p3e=easeInOutCubic(p3); const offsetX=lerp(slideOffset,0,p3e); const reveal=Math.round(p3e*100);
+    logo.style.opacity=opacity; logo.style.transform=`scale(${scale}) rotate(${rotate}deg)`;
+    lockup.style.transform=`translateX(${offsetX}px)`; nameClip.style.clipPath=`inset(0 ${100-reveal}% 0 0)`;
+    if(t<T3+50){requestAnimationFrame(tick);}else{logo.style.opacity='1';logo.style.transform='scale(1) rotate(360deg)';lockup.style.transform='translateX(0)';nameClip.style.clipPath='inset(0 0% 0 0)';}
   }
-
   requestAnimationFrame(tick);
 })();
 
-/* ═══ NAVBAR ═══════════════════════════════════════════ */
+/* ═══ NAVBAR ════════════════════════════════════════════ */
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
 
-/* ═══ HAMBURGER ════════════════════════════════════════ */
+/* ═══ HAMBURGER ═════════════════════════════════════════ */
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open');
   document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
 });
 function closeMobile() {
-  hamburger.classList.remove('open');
-  mobileMenu.classList.remove('open');
-  document.body.style.overflow = '';
+  hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); document.body.style.overflow='';
 }
 
-/* ═══ SCROLL REVEAL ════════════════════════════════════ */
+/* ═══ SCROLL REVEAL ══════════════════════════════════════ */
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.12 });
 reveals.forEach(el => observer.observe(el));
 
-/* ═══ CONTACT FORM ════════════════════════════════════ */
+/* ═══ CONTACT FORM ═══════════════════════════════════════ */
 function sendMail(e) {
   e.preventDefault();
-  const fname   = document.getElementById('fname').value.trim();
-  const lname   = document.getElementById('lname').value.trim();
-  const email   = document.getElementById('email').value.trim();
-  const phone   = document.getElementById('phone').value.trim();
-  const service = document.getElementById('service').value;
-  const company = document.getElementById('company').value.trim();
-  const message = document.getElementById('message').value.trim();
-  const subject = encodeURIComponent(`Project Inquiry — ${service} | ${fname} ${lname}`);
-  const body    = encodeURIComponent(
-`Hello FLIP Team,
-
-I'm interested in your ${service} service and would like to discuss a project.
-
-— CONTACT DETAILS —
-Name: ${fname} ${lname}
-Email: ${email}
-Phone: ${phone || 'Not provided'}
-Company: ${company || 'Not provided'}
-Service: ${service}
-
-— PROJECT DETAILS —
-${message}
-
-Looking forward to hearing from you.
-
-Best regards,
-${fname} ${lname}`);
-  window.location.href = `mailto:flip.techh@gmail.com?subject=${subject}&body=${body}`;
+  const fname=document.getElementById('fname').value.trim(), lname=document.getElementById('lname').value.trim(),
+        email=document.getElementById('email').value.trim(), phone=document.getElementById('phone').value.trim(),
+        service=document.getElementById('service').value, company=document.getElementById('company').value.trim(),
+        message=document.getElementById('message').value.trim();
+  const subject=encodeURIComponent(`Project Inquiry — ${service} | ${fname} ${lname}`);
+  const body=encodeURIComponent(`Hello FLIP Team,\n\nI'm interested in your ${service} service and would like to discuss a project.\n\n— CONTACT DETAILS —\nName: ${fname} ${lname}\nEmail: ${email}\nPhone: ${phone||'Not provided'}\nCompany: ${company||'Not provided'}\nService: ${service}\n\n— PROJECT DETAILS —\n${message}\n\nLooking forward to hearing from you.\n\nBest regards,\n${fname} ${lname}`);
+  window.location.href=`mailto:flip.techh@gmail.com?subject=${subject}&body=${body}`;
 }
 </script>
 </body>
